@@ -225,6 +225,76 @@ Task:
 
 Paste the generated code for your Users table below. Try to read it, then open the answers below.
 
+~~~
+CREATE TABLE `users` (
+  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) UNIQUE NOT NULL
+);
+
+CREATE TABLE `addresses` (
+  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `label` varchar(255) NOT NULL,
+  `street` varchar(255) NOT NULL,
+  `city` varchar(255) NOT NULL
+);
+
+CREATE TABLE `restaurants` (
+  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `cuisine_type` varchar(255) NOT NULL,
+  `rating` decimal
+);
+
+CREATE TABLE `menu_items` (
+  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `restaurant_id` int NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `price` decimal NOT NULL
+);
+
+CREATE TABLE `couriers` (
+  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `vehicle_type` varchar(255) NOT NULL
+);
+
+CREATE TABLE `orders` (
+  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `restaurant_id` int NOT NULL,
+  `courier_id` int NOT NULL,
+  `delivery_address_id` int NOT NULL,
+  `order_date` timestamp NOT NULL,
+  `status` varchar(255) NOT NULL
+);
+
+CREATE TABLE `order_items` (
+  `order_id` int NOT NULL,
+  `menu_item_id` int NOT NULL,
+  `quantity` int NOT NULL DEFAULT 1,
+  `unit_price` decimal NOT NULL,
+  PRIMARY KEY (`order_id`, `menu_item_id`)
+);
+
+ALTER TABLE `addresses` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+ALTER TABLE `menu_items` ADD FOREIGN KEY (`restaurant_id`) REFERENCES `restaurants` (`id`);
+
+ALTER TABLE `orders` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+ALTER TABLE `orders` ADD FOREIGN KEY (`restaurant_id`) REFERENCES `restaurants` (`id`);
+
+ALTER TABLE `orders` ADD FOREIGN KEY (`courier_id`) REFERENCES `couriers` (`id`);
+
+ALTER TABLE `orders` ADD FOREIGN KEY (`delivery_address_id`) REFERENCES `addresses` (`id`);
+
+ALTER TABLE `order_items` ADD FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`);
+
+ALTER TABLE `order_items` ADD FOREIGN KEY (`menu_item_id`) REFERENCES `menu_items` (`id`);
+~~~
+
 * What does NOT NULL mean?
 
 <details>
