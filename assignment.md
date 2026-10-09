@@ -49,6 +49,61 @@ Solution Required:
 
 Create a Junction Table (often called order\_items or order\_details) to sit between Orders and Menu Items.
 
+~~~
+Table users {
+  id int [pk, increment]
+  name varchar [not null]
+  email varchar [not null]
+}
+
+Table restaurants {
+  id int [pk, increment]
+  name varchar [not null]
+  cuisine_type varchar [not null]
+  rating decimal
+}
+
+Table menu_items {
+  id int [pk, increment]
+  restaurant_id int [not null]
+  name varchar [not null]
+  price decimal [not null]
+}
+
+Table couriers {
+  id int [pk, increment]
+  name varchar [not null]
+  vehicle_type varchar [not null]
+}
+
+Table orders {
+  id int [pk, increment]
+  user_id int [not null]
+  restaurant_id int [not null]
+  courier_id int [not null]
+  order_date timestamp [not null]
+}
+
+// --- JUNCTION TABLE (Challenge 1 Solution) ---
+Table order_items {
+  order_id int [not null]
+  menu_item_id int [not null]
+  quantity int [not null, default: 1]
+
+  indexes {
+    (order_id, menu_item_id) [pk] // Composite Primary Key
+  }
+}
+
+// Relationships
+Ref: menu_items.restaurant_id > restaurants.id
+Ref: orders.user_id > users.id
+Ref: orders.restaurant_id > restaurants.id
+Ref: orders.courier_id > couriers.id
+Ref: order_items.order_id > orders.id
+Ref: order_items.menu_item_id > menu_items.id
+~~~
+
 ## **🕵️ Challenge 2: The "History" Problem (Normalization Trap)**
 
 **Scenario:**
